@@ -19,10 +19,12 @@ type t =
   | Pattern
   | Repl_file
   | Documentation
+  | Lexer_file
 
 let of_fname fname =
   match Filename.extension fname with
   | ".ml" | ".mlt" | ".eliom" -> Some Use_file
   | ".mli" | ".eliomi" -> Some Signature
   | ".mld" -> Some Documentation
+  | ".mll" -> Some Lexer_file
   | _ -> None

@@ -19,6 +19,7 @@ type t =
   | Pattern
   | Repl_file
   | Documentation
+  | Lexer_file
 
 val of_fname : string -> t option
 (** The expected syntax of a file given its name. *)

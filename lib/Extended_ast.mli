@@ -17,6 +17,8 @@ type use_file = toplevel_phrase list
 
 type repl_file = repl_phrase list
 
+type lexer_file = unit (* TODO *)
+
 type 'a t =
   | Structure : structure t
   | Signature : signature t
@@ -27,6 +29,7 @@ type 'a t =
   | Pattern : pattern t
   | Repl_file : repl_file t
   | Documentation : Ocamlformat_odoc_parser.Ast.t t
+  | Lexer_file : lexer_file t
 
 type any_t = Any : 'a t -> any_t [@@unboxed]
 

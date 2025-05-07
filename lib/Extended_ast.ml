@@ -18,6 +18,8 @@ type use_file = toplevel_phrase list
 
 type repl_file = repl_phrase list
 
+type lexer_file = unit (* TODO *)
+
 type 'a t =
   | Structure : structure t
   | Signature : signature t
@@ -28,6 +30,7 @@ type 'a t =
   | Pattern : pattern t
   | Repl_file : repl_file t
   | Documentation : Ocamlformat_odoc_parser.Ast.t t
+  | Lexer_file : lexer_file t
 
 type any_t = Any : 'a t -> any_t [@@unboxed]
 
@@ -41,6 +44,7 @@ let of_syntax = function
   | Pattern -> Any Pattern
   | Repl_file -> Any Repl_file
   | Documentation -> Any Documentation
+  | Lexer_file -> Any Lexer_file
 
 let equal (type a) (_ : a t) : a -> a -> bool = Poly.equal
 
@@ -55,6 +59,7 @@ let map (type a) (x : a t) (m : Ast_mapper.mapper) : a -> a =
   | Pattern -> m.pat m
   | Repl_file -> List.map ~f:(m.repl_phrase m)
   | Documentation -> Fn.id
+  | Lexer_file -> Fn.id (* TODO *)
 
 module Parse = struct
   let normalize_mapper ~ocaml_version ~preserve_beginend =
@@ -268,6 +273,7 @@ module Parse = struct
         let pos = (Location.curr lexbuf).loc_start in
         let pos = {pos with pos_fname= input_name} in
         Docstring.parse_file pos str
+    | Lexer_file -> () (* TODO *)
 end
 
 module Printast = struct
@@ -287,6 +293,7 @@ module Printast = struct
     | Pattern -> pattern
     | Repl_file -> repl_file
     | Documentation -> Docstring.dump
+    | Lexer_file -> fun _ _ -> () (* TODO *)
 end
 
 module Asttypes = struct
